@@ -1,0 +1,24 @@
+{
+    "username": "admin",
+    "email": "bernhard.scheucher@gmail.com",
+    "password": "sB1970#Rb",
+    "is_admin": true
+}
+
+{
+    "username": "user1",
+    "email": "user1r@email.com",
+    "password": "T3st1ng"
+}
+
+{
+    "username": "user2",
+    "email": "user2@email.com",
+    "password": "T3st1ng"
+}
+
+{
+    "username": "user3",
+    "email": "user3@email.com",
+    "password": "T3st1ng"
+}

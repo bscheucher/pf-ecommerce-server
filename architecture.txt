@@ -1,0 +1,106 @@
+1. Users
+
+Service Functions:
+createUser(data): Add a new user.
+getUserById(userId): Retrieve a user by ID.
+getUserByEmail(email): Retrieve a user by email.
+updateUser(userId, data): Update user details.
+deleteUser(userId): Delete a user.
+authenticateUser(email, password): Verify user credentials.
+
+Controller Functions:
+registerUser(req, res): Handle user registration.
+loginUser(req, res): Handle user login.
+getUserProfile(req, res): Fetch user profile details.
+updateUserProfile(req, res): Update user profile details.
+deleteUserAccount(req, res): Delete user account.
+
+2. Products
+Service Functions:
+createProduct(data): Add a new product.
+getProductById(productId): Retrieve product details by ID.
+getAllProducts(filter): Retrieve all products with optional filters (e.g., category, price range).
+updateProduct(productId, data): Update product details.
+deleteProduct(productId): Delete a product.
+Controller Functions:
+addProduct(req, res): Handle adding a new product.
+getProduct(req, res): Fetch a specific product.
+listProducts(req, res): Fetch all products.
+updateProduct(req, res): Update product details.
+deleteProduct(req, res): Remove a product.
+
+3. Categories
+Service Functions:
+createCategory(data): Add a new category.
+getCategoryById(categoryId): Retrieve category details by ID.
+getAllCategories(): Fetch all categories.
+updateCategory(categoryId, data): Update category details.
+deleteCategory(categoryId): Delete a category.
+Controller Functions:
+addCategory(req, res): Handle adding a new category.
+getCategory(req, res): Fetch category details.
+listCategories(req, res): Fetch all categories.
+updateCategory(req, res): Update category details.
+deleteCategory(req, res): Delete a category.
+
+4. Orders
+Service Functions:
+createOrder(data): Place a new order.
+getOrderById(orderId): Retrieve an order by ID.
+getOrdersByUser(userId): Retrieve all orders for a user.
+updateOrderStatus(orderId, status): Update order status (e.g., pending, completed).
+deleteOrder(orderId): Cancel/delete an order.
+Controller Functions:
+placeOrder(req, res): Handle placing a new order.
+getOrder(req, res): Fetch order details.
+listUserOrders(req, res): Fetch all orders for a user.
+updateOrder(req, res): Update order status/details.
+cancelOrder(req, res): Cancel an order.
+
+5. Reviews
+Service Functions:
+createReview(data): Add a review for a product.
+getReviewsByProduct(productId): Retrieve reviews for a product.
+getReviewById(reviewId): Fetch a specific review.
+updateReview(reviewId, data): Update a review.
+deleteReview(reviewId): Delete a review.
+Controller Functions:
+addReview(req, res): Handle adding a review.
+getReviews(req, res): Fetch all reviews for a product.
+updateReview(req, res): Update a review.
+deleteReview(req, res): Remove a review.
+
+6. Payment
+Service Functions:
+createPayment(data): Process a new payment.
+getPaymentById(paymentId): Retrieve payment details by ID.
+updatePaymentStatus(paymentId, status): Update payment status (e.g., successful, failed).
+getPaymentsByOrder(orderId): Fetch payments for an order.
+Controller Functions:
+initiatePayment(req, res): Handle payment initiation.
+getPaymentDetails(req, res): Fetch payment details.
+updatePayment(req, res): Update payment status.
+
+7. Addresses
+Service Functions:
+createAddress(data): Add a new address for a user.
+getAddressesByUser(userId): Retrieve all addresses for a user.
+getAddressById(addressId): Fetch address details.
+updateAddress(addressId, data): Update an address.
+deleteAddress(addressId): Remove an address.
+Controller Functions:
+addAddress(req, res): Handle adding an address.
+getUserAddresses(req, res): Fetch all addresses for a user.
+updateAddress(req, res): Update an address.
+deleteAddress(req, res): Remove an address.
+
+8. Product Categories (Junction Table)
+Service Functions:
+addProductToCategory(productId, categoryId): Link a product to a category.
+removeProductFromCategory(productId, categoryId): Unlink a product from a category.
+getProductsByCategory(categoryId): Retrieve products in a category.
+getCategoriesByProduct(productId): Retrieve categories for a product.
+Controller Functions:
+assignProductToCategory(req, res): Handle linking a product to a category.
+removeProductFromCategory(req, res): Handle unlinking a product from a category.
+listProductsByCategory(req, res): Fetch products in a category.
