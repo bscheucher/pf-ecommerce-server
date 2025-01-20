@@ -61,3 +61,5 @@ export const editUser = async (id, updates) => {
   const result = await pool.query(query, values);
   return result.rows[0];
 };
+
+
