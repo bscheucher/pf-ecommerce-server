@@ -76,3 +76,33 @@ export const removeCategory = async (categoryId) => {
     throw new Error(`Failed to delete category: ${error.message}`);
   }
 };
+
+export const assignCategoryToProduct = async(productId, categoryId) => {
+  const query = `
+      INSERT INTO os_product_categories (product_id, category_id)
+      VALUES ($1, $2)
+      ON CONFLICT DO NOTHING; -- Prevent duplicate entries
+  `;
+  await pool.query(query, [productId, categoryId]);
+}
+
+// Remove a category from a product
+export const removeCategoryFromProduct = async(productId, categoryId) => {
+  const query = `
+      DELETE FROM os_product_categories
+      WHERE product_id = $1 AND category_id = $2;
+  `;
+  await pool.query(query, [productId, categoryId]);
+}
+
+// Get categories of a product
+export const getCategoriesOfProduct = async(productId) => {
+  const query = `
+      SELECT c.id, c.name, c.description
+      FROM os_categories c
+      INNER JOIN os_product_categories pc ON c.id = pc.category_id
+      WHERE pc.product_id = $1;
+  `;
+  const { rows } = await pool.query(query, [productId]);
+  return rows;
+}

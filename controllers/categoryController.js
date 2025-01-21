@@ -4,6 +4,9 @@ import {
   getCategoryById,
   reviseCategory,
   removeCategory,
+  assignCategoryToProduct,
+  removeCategoryFromProduct,
+  getCategoriesOfProduct,
 } from "../services/categoryService.js";
 
 export const addCategory = async (req, res) => {
@@ -82,5 +85,46 @@ export const deleteCategory = async (req, res) => {
 
     // Handle general server errors
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const addCategoryToProduct = async (req, res) => {
+  const { productId, categoryId } = req.body;
+
+  try {
+    await assignCategoryToProduct(productId, categoryId);
+    res
+      .status(200)
+      .json({ message: "Category assigned to product successfully." });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to assign category to product." });
+  }
+};
+
+// Remove a category from a product
+export const detachCategoryFromProduct = async (req, res) => {
+  const { productId, categoryId } = req.body;
+
+  try {
+    await removeCategoryFromProduct(productId, categoryId);
+    res
+      .status(200)
+      .json({ message: "Category removed from product successfully." });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to remove category from product." });
+  }
+};
+
+// Get categories of a product
+export const getProductCategories = async (req, res) => {
+  const { productId } = req.params;
+
+  try {
+    const categories = await getCategoriesOfProduct(productId);
+    res.status(200).json(categories);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Failed to retrieve categories for the product." });
   }
 };

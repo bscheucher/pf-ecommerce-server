@@ -4,7 +4,10 @@ import {
   getCategory,
   listCategories,
   updateCategory,
-  deleteCategory
+  deleteCategory,
+  addCategoryToProduct,
+  detachCategoryFromProduct,
+  getProductCategories,
 } from "../controllers/categoryController.js";
 
 const router = express.Router();
@@ -14,5 +17,8 @@ router.get("/", listCategories);
 router.get("/:id", getCategory);
 router.put("/:id", updateCategory);
 router.delete("/:id/delete", deleteCategory);
+router.post('/add-to-product', addCategoryToProduct);
+router.delete('/remove-from-product', detachCategoryFromProduct);
+router.get('/of-product/:productId', getProductCategories);
 
 export default router;
