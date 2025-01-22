@@ -44,6 +44,11 @@ updateCategory(req, res): Update category details.
 deleteCategory(req, res): Delete a category.
 
 4. Orders
+statuses = ["Cancelled", "In progress", "Pending", 
+"Ready for dispatch", "Partially dispatched", 
+"Dispatched", "Delivered", "Partially invoiced", 
+"Invoiced", "Partially paid", "Paid", "Returned", 
+"Completed", "Archived"]
 Service Functions:
 createOrder(data): Place a new order.
 getOrderById(orderId): Retrieve an order by ID.

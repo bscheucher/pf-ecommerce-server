@@ -117,3 +117,136 @@ export const createOrder = async (data) => {
 
   return orderId;
 };
+
+export const getOrderById = async (orderId) => {
+  const orderQuery = `
+        SELECT 
+            o.id AS order_id,
+            o.user_id,
+            o.total_amount,
+            o.status,
+            o.created_at,
+            o.updated_at,
+            u.username AS user_name,
+            u.email AS user_email
+        FROM os_orders o
+        JOIN os_users u ON o.user_id = u.id
+        WHERE o.id = $1
+    `;
+
+  const itemsQuery = `
+        SELECT 
+            oi.id AS item_id,
+            oi.quantity,
+            oi.price,
+            oi.total_price,
+            p.id AS product_id,
+            p.name AS product_name,
+            p.description AS product_description,
+            p.image_url AS product_image
+        FROM os_order_items oi
+        JOIN os_products p ON oi.product_id = p.id
+        WHERE oi.order_id = $1
+    `;
+
+  try {
+    const orderResult = await pool.query(orderQuery, [orderId]);
+    if (orderResult.rows.length === 0) {
+      return null; // Order not found
+    }
+
+    const order = orderResult.rows[0];
+    const itemsResult = await pool.query(itemsQuery, [orderId]);
+
+    return {
+      orderId: order.order_id,
+      userId: order.user_id,
+      userName: order.user_name,
+      userEmail: order.user_email,
+      totalAmount: order.total_amount,
+      status: order.status,
+      createdAt: order.created_at,
+      updatedAt: order.updated_at,
+      items: itemsResult.rows,
+    };
+  } catch (error) {
+    console.error("Error fetching order by ID:", error);
+    throw new Error("Database query failed");
+  }
+};
+
+export const getOrdersByUser = async (userId) => {
+  try {
+    const orders = await pool.query(
+      `
+            SELECT 
+                o.id AS order_id,
+                o.total_amount,
+                o.status,
+                o.created_at,
+                o.updated_at,
+                ARRAY_AGG(
+                    JSON_BUILD_OBJECT(
+                        'product_id', oi.product_id,
+                        'quantity', oi.quantity,
+                        'price', oi.price,
+                        'total_price', oi.total_price,
+                        'product_name', p.name
+                    )
+                ) AS items
+            FROM os_orders o
+            LEFT JOIN os_order_items oi ON o.id = oi.order_id
+            LEFT JOIN os_products p ON oi.product_id = p.id
+            WHERE o.user_id = $1
+            GROUP BY o.id
+            ORDER BY o.created_at DESC
+            `,
+      [userId]
+    );
+
+    return orders.rows;
+  } catch (error) {
+    console.error("Error fetching orders for user:", error);
+    throw new Error("Could not retrieve user orders.");
+  }
+};
+
+export const updateOrderStatus = async (orderId, status) => {
+  try {
+    const result = await pool.query(
+      `UPDATE os_orders 
+             SET status = $1, updated_at = CURRENT_TIMESTAMP 
+             WHERE id = $2 
+             RETURNING *`,
+      [status, orderId]
+    );
+
+    if (result.rowCount === 0) {
+      throw new Error(`Order with ID ${orderId} not found.`);
+    }
+
+    return result.rows[0];
+  } catch (error) {
+    console.error(`Error updating order status: ${error.message}`);
+    throw error;
+  }
+};
+
+export const deleteOrder = async (orderId) => {
+  try {
+    const result = await pool.query(
+      "DELETE FROM os_orders WHERE id = $1 RETURNING id",
+      [orderId]
+    );
+    if (result.rowCount === 0) {
+      throw new Error(`Order with ID ${orderId} does not exist.`);
+    }
+    return {
+      success: true,
+      message: `Order with ID ${orderId} has been deleted.`,
+    };
+  } catch (error) {
+    console.error("Error deleting order:", error.message);
+    throw new Error("Could not delete the order. Please try again later.");
+  }
+};

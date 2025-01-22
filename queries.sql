@@ -73,7 +73,8 @@ CREATE TABLE os_payments (
     payment_method VARCHAR(50) NOT NULL,
     payment_status VARCHAR(50) DEFAULT 'Pending',
     transaction_id VARCHAR(100),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Reviews table

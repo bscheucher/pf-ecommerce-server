@@ -77,26 +77,26 @@ export const removeCategory = async (categoryId) => {
   }
 };
 
-export const assignCategoryToProduct = async(productId, categoryId) => {
+export const assignCategoryToProduct = async (productId, categoryId) => {
   const query = `
       INSERT INTO os_product_categories (product_id, category_id)
       VALUES ($1, $2)
       ON CONFLICT DO NOTHING; -- Prevent duplicate entries
   `;
   await pool.query(query, [productId, categoryId]);
-}
+};
 
 // Remove a category from a product
-export const removeCategoryFromProduct = async(productId, categoryId) => {
+export const removeCategoryFromProduct = async (productId, categoryId) => {
   const query = `
       DELETE FROM os_product_categories
       WHERE product_id = $1 AND category_id = $2;
   `;
   await pool.query(query, [productId, categoryId]);
-}
+};
 
 // Get categories of a product
-export const getCategoriesOfProduct = async(productId) => {
+export const getCategoriesOfProduct = async (productId) => {
   const query = `
       SELECT c.id, c.name, c.description
       FROM os_categories c
@@ -105,4 +105,20 @@ export const getCategoriesOfProduct = async(productId) => {
   `;
   const { rows } = await pool.query(query, [productId]);
   return rows;
-}
+};
+
+export const getProductsByCategory = async (categoryId) => {
+  try {
+    const query = `
+      SELECT os_products.* 
+      FROM os_products
+      JOIN os_product_categories ON os_products.id = os_product_categories.product_id
+      WHERE os_product_categories.category_id = $1
+    `;
+    const { rows } = await pool.query(query, [categoryId]); 
+
+    return rows; 
+  } catch (error) {
+    throw new Error("Error fetching products for category: " + error.message);
+  }
+};

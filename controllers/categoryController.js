@@ -7,6 +7,7 @@ import {
   assignCategoryToProduct,
   removeCategoryFromProduct,
   getCategoriesOfProduct,
+  getProductsByCategory,
 } from "../services/categoryService.js";
 
 export const addCategory = async (req, res) => {
@@ -126,5 +127,25 @@ export const getProductCategories = async (req, res) => {
     res
       .status(500)
       .json({ error: "Failed to retrieve categories for the product." });
+  }
+};
+
+export const getCategoryProducts = async (req, res) => {
+  const { categoryId } = req.params; 
+
+  try {
+    const products = await getProductsByCategory(categoryId);
+
+    if (products.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No products found for this category" });
+    }
+
+    return res.status(200).json({ products });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching products: " + error.message });
   }
 };
