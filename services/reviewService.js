@@ -23,7 +23,7 @@ export const getReviewsByProduct = async (productId) => {
     const reviews = await pool.query(
       `
         SELECT 
-          r.id, r.rating, r.comment, r.created_at, u.username 
+          r.id, r.rating, r.comment, r.created_at, r.user_id, u.username 
         FROM 
           os_reviews r
         INNER JOIN 

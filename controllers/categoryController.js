@@ -93,11 +93,15 @@ export const addCategoryToProduct = async (req, res) => {
   const { productId, categoryId } = req.body;
 
   try {
+    // Log values to ensure they are correct
+    console.log("Assigning category", categoryId, "to product", productId);
     await assignCategoryToProduct(productId, categoryId);
     res
       .status(200)
       .json({ message: "Category assigned to product successfully." });
   } catch (error) {
+    // Log the error for more insight
+    console.error("Error in assigning category:", error);
     res.status(500).json({ error: "Failed to assign category to product." });
   }
 };
@@ -131,15 +135,14 @@ export const getProductCategories = async (req, res) => {
 };
 
 export const getCategoryProducts = async (req, res) => {
-  const { categoryId } = req.params; 
+  const { categoryId } = req.params;
 
   try {
     const products = await getProductsByCategory(categoryId);
 
+    // Check if there are no products and return a 200 with an empty array
     if (products.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No products found for this category" });
+      return res.status(200).json({ products: [] });
     }
 
     return res.status(200).json({ products });

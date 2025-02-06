@@ -4,6 +4,7 @@ import {
   getAllProducts,
   reviseProduct,
   removeProduct,
+  seekInProducts,
 } from "../services/productService.js";
 
 export const addProduct = async (req, res) => {
@@ -84,6 +85,7 @@ export const listProducts = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   const productId = parseInt(req.params.id, 10);
+  console.log("in controller", productId);
   const data = req.body;
 
   if (!productId || isNaN(productId)) {
@@ -118,5 +120,26 @@ export const deleteProduct = async (req, res) => {
 
     // Handle general server errors
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const searchInProducts = async (req, res) => {
+  const queryObject = req.body;
+  const query = queryObject.query.query;
+
+  if (!query || query.trim().length < 3) {
+    return res
+      .status(400)
+      .json({ error: "Query must be at least 3 characters long." });
+  }
+
+  try {
+    const products = await seekInProducts(query.trim());
+    return res.status(200).json(products);
+  } catch (err) {
+    console.error(`Error searching for query "${query}":`, err);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while searching products." });
   }
 };

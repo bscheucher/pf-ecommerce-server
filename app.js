@@ -14,14 +14,13 @@ const allowedOrigins = ["http://localhost:3000"];
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Allow the origin
+      callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS")); // Reject the origin
     }
   },
   credentials: true, // Allow credentials (cookies, headers, etc.)
 };
-
 
 // Configure CORS
 app.use(cors(corsOptions));

@@ -36,7 +36,7 @@ export const getAddressesByUser = async (userId) => {
             WHERE user_id = $1
         `;
     const result = await pool.query(query, [userId]);
-    return result.rows; // Returns an array of address objects
+    return result.rows; 
   } catch (error) {
     console.error("Error fetching addresses:", error.message);
     throw new Error("Unable to fetch addresses at this time");

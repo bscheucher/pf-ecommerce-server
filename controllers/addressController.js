@@ -16,6 +16,7 @@ export const addAddress = async (req, res) => {
     country,
     phoneNumber,
   } = req.body;
+  console.log("AddAdress req.body", req.body);
   const userId = req.user?.id;
 
   if (!userId) {
@@ -58,10 +59,10 @@ export const getUserAddresses = async (req, res) => {
 
     const addresses = await getAddressesByUser(userId);
 
-    if (addresses.length === 0) {
+    if (!addresses || addresses.length === 0) {
       return res
-        .status(404)
-        .json({ message: "No addresses found for this user" });
+        .status(200)
+        .json({ message: "No addresses found for this user", addresses: [] });
     }
 
     res.status(200).json({ addresses });
@@ -107,7 +108,7 @@ export const updateAddress = async (req, res) => {
 };
 
 export const deleteAddress = async (req, res) => {
-  const { addressId } = req.params; 
+  const { addressId } = req.params;
 
   try {
     const deletedAddress = await removeAddress(addressId);

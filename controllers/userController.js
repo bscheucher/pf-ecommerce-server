@@ -58,6 +58,9 @@ export const getUserById = async (req, res) => {
 };
 
 export const login = (req, res, next) => {
+  console.log("login is called in controller");
+  console.log("Request:", req);
+  console.log("Response:", res);
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
     if (!user) {
@@ -69,12 +72,13 @@ export const login = (req, res, next) => {
 
       // Generate a JWT
       const token = jwt.sign(
-        { id: user.id, email: user.email },
+        { id: user.id, email: user.email, isAdmin: user.is_admin },
 
         process.env.JWT_SECRET, // Secret key from environment variable
         { expiresIn: "1h" } // Token expiration time
       );
-      console.log("User", user);
+      console.log("Token:", token);
+      console.log("User:", user);
       res.status(201).json({
         message: "User logged in successfully!",
         token, // Send token to the client
@@ -116,9 +120,7 @@ export const updateUser = async (req, res) => {
     const updates = {
       username: username || oldUserData.username,
       email: email || oldUserData.email,
-      password: password
-        ? await bcrypt.hash(password, 10)
-        : oldUserData.password,
+      password: password || oldUserData.password,
     };
 
     const updatedUser = await editUser(id, updates);

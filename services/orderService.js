@@ -1,5 +1,14 @@
 import pool from "../config/database.js";
 
+export const getAllOrders = async () => {
+  const query = `
+    SELECT * FROM os_orders;
+    `;
+
+  const result = await pool.query(query);
+  return result.rows;
+};
+
 export const createOrder = async (data) => {
   const { userId, items, addressId, address, paymentMethod } = data;
 

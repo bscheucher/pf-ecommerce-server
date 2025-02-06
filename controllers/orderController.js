@@ -4,19 +4,26 @@ import {
   getOrdersByUser,
   updateOrderStatus,
   deleteOrder,
+  getAllOrders
 } from "../services/orderService.js";
+
+
+export const listOrders = async (req, res) => {
+  try {
+    const orders = await getAllOrders();
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 export const placeOrder = async (req, res) => {
   try {
+    console.log("Current user:", req.user);
     const userId = req.user.id;
+
     const { items, addressId, address, paymentMethod } = req.body;
-
-    if (!items || items.length === 0) {
-      return res.status(400).json({ error: "Order must include items." });
-    }
-
-    // Pass addressId or address to the createOrder function
-    const orderId = await createOrder({
+    console.log("Order Data Received:", {
       userId,
       items,
       addressId,
@@ -24,9 +31,30 @@ export const placeOrder = async (req, res) => {
       paymentMethod,
     });
 
-    res.status(201).json({ message: "Order placed successfully", orderId });
+    if (!items || items.length === 0) {
+      return res.status(400).json({ error: "Order must include items." });
+    }
+
+    // Create order
+    const order = await createOrder({
+      userId,
+      items,
+      addressId,
+      address,
+      paymentMethod,
+    });
+
+    console.log("Created Order:", order); // Debugging
+
+    if (!order) {
+      return res.status(500).json({ error: "Order creation failed." });
+    }
+
+    res
+      .status(201)
+      .json({ message: "Order placed successfully", orderId: order.id });
   } catch (error) {
-    console.error("Error placing order:", error.message);
+    console.error("Error placing order:", error);
     res
       .status(500)
       .json({ error: "Failed to place order. Please try again later." });
@@ -105,5 +133,3 @@ export const cancelOrder = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-
-
