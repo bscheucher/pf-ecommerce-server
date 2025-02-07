@@ -110,8 +110,11 @@ export const removeProduct = async (productId) => {
   const query = "DELETE FROM os_products WHERE id = $1 RETURNING *";
 
   try {
-    // Execute the delete query
-    const result = await pool.query(query, [productId]);
+    const id = parseInt(productId, 10);
+    if (isNaN(id)) {
+      throw new Error("Invalid product ID.");
+    }
+    const result = await pool.query(query, [id]);
 
     // Check if the product existed
     if (result.rowCount === 0) {

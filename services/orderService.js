@@ -2,7 +2,7 @@ import pool from "../config/database.js";
 
 export const getAllOrders = async () => {
   const query = `
-    SELECT * FROM os_orders;
+    SELECT * FROM os_orders ORDER BY created_at DESC;
     `;
 
   const result = await pool.query(query);

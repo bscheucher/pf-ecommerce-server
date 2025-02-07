@@ -50,9 +50,11 @@ export const placeOrder = async (req, res) => {
       return res.status(500).json({ error: "Order creation failed." });
     }
 
-    res
-      .status(201)
-      .json({ message: "Order placed successfully", orderId: order.id });
+    // Return 201 status with the created order
+    res.status(201).json({
+      message: "Order placed successfully.",
+      order: order, // Returning the order object
+    });
   } catch (error) {
     console.error("Error placing order:", error);
     res

@@ -72,14 +72,13 @@ export const updatePayment = async (req, res) => {
 
 export const getOrderPayments = async (req, res) => {
   const { orderId } = req.params;
-  
+
   try {
     const payments = await getPaymentsByOrder(orderId);
+    console.log("Payments for order:", JSON.stringify(payments, null, 2));
 
     if (payments.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No payments found for this order" });
+      return res.status(200).json({ payments: [] });
     }
 
     return res.status(200).json({ payments });

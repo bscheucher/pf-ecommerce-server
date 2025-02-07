@@ -101,17 +101,19 @@ export const updateProduct = async (req, res) => {
 };
 
 export const deleteProduct = async (req, res) => {
-  const { id } = req.params;
+  const productId = parseInt(req.params.id);
 
   // Validate if the ID is provided
-  if (!id) {
+  if (!productId) {
     return res.status(400).json({ error: "Product ID is required" });
   }
 
   try {
     // Call the service function to remove the product
-    await removeProduct(id);
-    res.status(200).json({ message: `Product with ID ${id} has been deleted` });
+    await removeProduct(productId);
+    res
+      .status(200)
+      .json({ message: `Product with ID ${productId} has been deleted` });
   } catch (error) {
     // Handle "not found" error separately
     if (error.message.includes("not found")) {
