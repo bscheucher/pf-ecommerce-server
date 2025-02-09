@@ -11,8 +11,8 @@ import {
 const router = express.Router();
 
 router.post("/register", validateUserInput, registerUser);
-router.get("/:id", getUserById);
+router.get("/:id", authenticateToken, getUserById);
 router.post("/login", login);
-router.put("/:id/update", updateUser);
+router.put("/:id/update", authenticateToken, updateUser);
 
 export default router;

@@ -5,11 +5,12 @@ import {
   updatePayment,
   getOrderPayments,
 } from "../controllers/paymentController.js";
+import { authenticateToken } from "../middleware/authenticateToken.js";
 
 const router = express.Router();
 
-router.post("/add", initiatePayment);
-router.get("/:paymentId", getPaymentDetails);
-router.get("/of-order/:orderId", getOrderPayments);
-router.put("/:paymentId", updatePayment);
+router.post("/add", authenticateToken, initiatePayment);
+router.get("/:paymentId", authenticateToken, getPaymentDetails);
+router.get("/of-order/:orderId", authenticateToken, getOrderPayments);
+router.put("/:paymentId", authenticateToken, updatePayment);
 export default router;

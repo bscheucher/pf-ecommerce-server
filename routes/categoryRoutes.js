@@ -10,16 +10,17 @@ import {
   getProductCategories,
   getCategoryProducts,
 } from "../controllers/categoryController.js";
+import { authenticateToken } from "../middleware/authenticateToken.js";
 
 const router = express.Router();
 
-router.post("/add", addCategory);
+router.post("/add", authenticateToken, addCategory);
 router.get("/", listCategories);
 router.get("/:id", getCategory);
-router.put("/:id", updateCategory);
-router.delete("/:id/delete", deleteCategory);
-router.post("/add-to-product", addCategoryToProduct);
-router.delete("/remove-from-product", detachCategoryFromProduct);
+router.put("/:id", authenticateToken, updateCategory);
+router.delete("/:id/delete", authenticateToken, deleteCategory);
+router.post("/add-to-product", authenticateToken, addCategoryToProduct);
+router.delete("/remove-from-product", authenticateToken, detachCategoryFromProduct);
 router.get("/of-product/:productId", getProductCategories);
 router.get("/:categoryId/products", getCategoryProducts);
 

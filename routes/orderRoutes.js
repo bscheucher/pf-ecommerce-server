@@ -7,14 +7,15 @@ import {
   updateOrder,
   cancelOrder,
 } from "../controllers/orderController.js";
+import { authenticateToken } from "../middleware/authenticateToken.js";
 
 const router = express.Router();
 
-router.get("/", listOrders);
-router.get("/:id", getOrder);
-router.get("/of-user/:userId", listUserOrders);
-router.put("/:orderId", updateOrder);
-router.delete("/:orderId/delete", cancelOrder);
+router.get("/", authenticateToken, listOrders);
+router.get("/:id", authenticateToken, getOrder);
+router.get("/of-user/:userId", authenticateToken, listUserOrders);
+router.put("/:orderId", authenticateToken, updateOrder);
+router.delete("/:orderId/delete", authenticateToken, cancelOrder);
 
 export default router;
 router.post("/add", placeOrder);
