@@ -4,9 +4,8 @@ import {
   getOrdersByUser,
   updateOrderStatus,
   deleteOrder,
-  getAllOrders
+  getAllOrders,
 } from "../services/orderService.js";
-
 
 export const listOrders = async (req, res) => {
   try {
@@ -21,9 +20,8 @@ export const placeOrder = async (req, res) => {
   console.log("Received request body:", req.body); // Debugging line
   try {
     console.log("Current user:", req.user);
-    const userId = req.user.id;
 
-    const { items, addressId, address, paymentMethod } = req.body;
+    const { userId, items, addressId, address, paymentMethod } = req.body;
     console.log("Order Data Received:", {
       userId,
       items,
