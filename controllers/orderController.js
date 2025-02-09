@@ -18,6 +18,7 @@ export const listOrders = async (req, res) => {
 };
 
 export const placeOrder = async (req, res) => {
+  console.log("Received request body:", req.body); // Debugging line
   try {
     console.log("Current user:", req.user);
     const userId = req.user.id;
